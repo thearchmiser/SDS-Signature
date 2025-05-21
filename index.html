@@ -7,85 +7,101 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to bottom, #ffffff, #eaeaea);
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      height: 100vh;
     }
-    h1 {
-      font-family: 'Script MT Bold', cursive;
-      font-size: 2.5rem;
-      margin-bottom: 20px;
+
+    .container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       text-align: center;
+      max-width: 500px;
+      width: 90%;
     }
-    .card {
-      background: white;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      max-width: 600px;
-      width: 100%;
-      text-align: center;
+
+    .header {
+      font-family: "Times New Roman", Times, serif;
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 10px;
     }
-    .copy-button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #0078d4;
+
+    .description {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    #copy-button {
+      padding: 12px 24px;
+      background-color: #0078D4;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 4px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      font-size: 16px;
     }
-    .copy-button:hover {
+
+    #copy-button:hover {
       background-color: #005fa3;
-    }
-    #hidden-signature {
-      display: none;
     }
   </style>
 </head>
 <body>
-  <h1>San Diego Symphony Email Signature</h1>
-  <div class="card">
-    <button class="copy-button" onclick="copySignature()">Click to copy</button>
+
+  <div class="container">
+    <div class="header">San Diego Symphony Email Signature</div>
+    <p class="description">Click the button below to copy your signature to your clipboard.<br>Then paste it into your email client’s signature settings.</p>
+    <button id="copy-button">Click to copy</button>
   </div>
 
-  <div id="hidden-signature">
-    <table cellpadding="0" cellspacing="0" style="font-family:Segoe UI, sans-serif; font-size:14px; color:#333;">
+  <div id="signature-html" style="display: none;">
+    <table cellpadding="0" cellspacing="0" style="font-family: Arial, sans-serif; font-size: 13px; color: #000;">
       <tr>
-        <td><img src="logo.png" alt="San Diego Symphony" style="height:100px;"></td>
-        <td style="padding-left:15px;">
-          <strong>First Last</strong><br>
-          Title<br>
-          <a href="mailto:email@sandiegosymphony.org" style="color:#0078d4;">email@sandiegosymphony.org</a><br>
-          Phone: (123) 456-7890<br>
-          <a href="https://www.sandiegosymphony.org" style="color:#0078d4;" target="_blank">www.sandiegosymphony.org</a>
+        <td style="vertical-align: top; padding-right: 15px;">
+          <img src="logo.png" alt="San Diego Symphony" style="height: 100px;">
+        </td>
+        <td style="border-left: 2px solid black; padding-left: 15px;">
+          <p style="margin: 0; font-weight: bold; font-size: 14px;">Your name here</p>
+          <p style="margin: 0; font-weight: bold;">Insert title here</p>
+          <p style="margin: 0;">P. Insert phone here (optional)</p>
+          <p style="margin: 0;"><a href="mailto:InsertEmail@sandiegosymphony.org" style="color: #0078D4;">InsertEmail@sandiegosymphony.org</a></p>
+          <br>
+          <p style="margin: 0;">Jacobs Music Center<br>
+            1245 Seventh Avenue | San Diego, CA 92101</p>
+          <br>
+          <p style="margin: 0;">The Rady Shell at Jacobs Park<br>
+            222 Marina Park Way | San Diego, CA 92101</p>
+          <p style="margin: 0;"><a href="https://www.sandiegosymphony.org" style="color: #0078D4;">www.sandiegosymphony.org</a></p>
         </td>
       </tr>
     </table>
   </div>
 
   <script>
-    function copySignature() {
-      const signature = document.getElementById('hidden-signature');
-      const range = document.createRange();
-      range.selectNode(signature);
-      const selection = window.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(range);
+    document.getElementById('copy-button').addEventListener('click', async () => {
+      const html = document.getElementById('signature-html').innerHTML;
+
       try {
-        document.execCommand('copy');
-        alert('Signature copied! You can now paste it into Outlook.');
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            'text/html': new Blob([html], { type: 'text/html' })
+          })
+        ]);
+        alert("Signature copied to clipboard! Paste it into Outlook's signature settings.");
       } catch (err) {
-        alert('Failed to copy. Try manually selecting and copying.');
+        alert("Failed to copy. Try using a supported browser like Chrome or Edge.");
+        console.error(err);
       }
-      selection.removeAllRanges();
-    }
+    });
   </script>
+
 </body>
 </html>
